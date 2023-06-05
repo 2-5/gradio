@@ -42,115 +42,123 @@
 		value = Math.min(Math.max(value, minimum), maximum);
 	};
 
-// --------------------------------------------------------------------------
+	// --------------------------------------------------------------------------
 
-const SCALE = 100
+	const SCALE = 100;
 
-const MID_X = SCALE / 2
-const MID_Y = SCALE / 2
+	const MID_X = SCALE / 2;
+	const MID_Y = SCALE / 2;
 
-const MIN_RADIANS = 4 * Math.PI / 3
-const MAX_RADIANS = -Math.PI / 3
+	const MIN_RADIANS = (4 * Math.PI) / 3;
+	const MAX_RADIANS = -Math.PI / 3;
 
-export let responsive = false
+	export let responsive = false;
 
-export let size = 50
+	export let size = 50;
 
-export let textColor = "#000000"
-export let lineColor = "#409eff"
-export let lineBackgroundColor = "#dcdfe6"
-export let lineWidth = 8
+	export let textColor = "#000000";
+	export let lineColor = "#409eff";
+	export let lineBackgroundColor = "#dcdfe6";
+	export let lineWidth = 8;
 
-export let sensitivity = 200
+	export let sensitivity = 200;
 
-let capturedValue = 0
-let capturedMovement = 0
+	let capturedValue = 0;
+	let capturedMovement = 0;
 
-$: svgSize = responsive ? size + "%" : size
+	$: svgSize = responsive ? size + "%" : size;
 
-$: arcFullPath = `M ${minX} ${minY} A ${radius} ${radius} ` +
-	`0 1 1 ${maxX} ${maxY}`
+	$: arcFullPath =
+		`M ${minX} ${minY} A ${radius} ${radius} ` + `0 1 1 ${maxX} ${maxY}`;
 
-$: arcValuePath = `M ${originX} ${originY} A ${radius} ${radius} ` +
-	`0 ${largeArc} ${sweep} ${valueX} ${valueY}`
+	$: arcValuePath =
+		`M ${originX} ${originY} A ${radius} ${radius} ` +
+		`0 ${largeArc} ${sweep} ${valueX} ${valueY}`;
 
-$: originRadians = (minimum > 0 && maximum > 0) ?
-	mapRange(minimum, minimum, maximum, MIN_RADIANS, MAX_RADIANS) :
-	mapRange(0, minimum, maximum, MIN_RADIANS, MAX_RADIANS)
+	$: originRadians =
+		minimum > 0 && maximum > 0
+			? mapRange(minimum, minimum, maximum, MIN_RADIANS, MAX_RADIANS)
+			: mapRange(0, minimum, maximum, MIN_RADIANS, MAX_RADIANS);
 
-$: valueRadians = mapRange(value, minimum, maximum, MIN_RADIANS, MAX_RADIANS)
+	$: valueRadians = mapRange(value, minimum, maximum, MIN_RADIANS, MAX_RADIANS);
 
-// radius goes to the middle of the stroke path, so subtract
-// half of the stroke width to make it touch the view box
-$: radius = Math.floor(SCALE / 2 - lineWidth / 2)
+	// radius goes to the middle of the stroke path, so subtract
+	// half of the stroke width to make it touch the view box
+	$: radius = Math.floor(SCALE / 2 - lineWidth / 2);
 
-$: minX = MID_X + Math.cos(MIN_RADIANS) * radius
-$: minY = MID_Y - Math.sin(MIN_RADIANS) * radius
-$: maxX = MID_X + Math.cos(MAX_RADIANS) * radius
-$: maxY = MID_Y - Math.sin(MAX_RADIANS) * radius
+	$: minX = MID_X + Math.cos(MIN_RADIANS) * radius;
+	$: minY = MID_Y - Math.sin(MIN_RADIANS) * radius;
+	$: maxX = MID_X + Math.cos(MAX_RADIANS) * radius;
+	$: maxY = MID_Y - Math.sin(MAX_RADIANS) * radius;
 
-$: originX = MID_X + Math.cos(originRadians) * radius
-$: originY = MID_Y - Math.sin(originRadians) * radius
+	$: originX = MID_X + Math.cos(originRadians) * radius;
+	$: originY = MID_Y - Math.sin(originRadians) * radius;
 
-$: valueX = MID_X + Math.cos(valueRadians) * radius
-$: valueY = MID_Y - Math.sin(valueRadians) * radius
+	$: valueX = MID_X + Math.cos(valueRadians) * radius;
+	$: valueY = MID_Y - Math.sin(valueRadians) * radius;
 
-$: largeArc = Math.abs(originRadians - valueRadians) < Math.PI ? 0 : 1
+	$: largeArc = Math.abs(originRadians - valueRadians) < Math.PI ? 0 : 1;
 
-$: sweep = valueRadians > originRadians ? 0 : 1
+	$: sweep = valueRadians > originRadians ? 0 : 1;
 
-function mapRange(x: number, inMin: number, inMax: number, outMin: number, outMax: number): number {
-	return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
-}
-
-function onPointerDown(e: PointerEvent): void {
-	if (!disabled) {
-		e.preventDefault()
-
-		capturedValue = value
-		capturedMovement = 0
-
-		window.addEventListener("pointermove", onPointerMove)
-		window.addEventListener("pointerup", onPointerUp)
+	function mapRange(
+		x: number,
+		inMin: number,
+		inMax: number,
+		outMin: number,
+		outMax: number
+	): number {
+		return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 	}
-}
 
-function onPointerUp(e: PointerEvent): void {
-	if (!disabled) {
-		e.preventDefault()
+	function onPointerDown(e: PointerEvent): void {
+		if (!disabled) {
+			e.preventDefault();
 
-		window.removeEventListener("pointermove", onPointerMove)
-		window.removeEventListener("pointerup", onPointerUp)
+			capturedValue = value;
+			capturedMovement = 0;
 
-		dispatch("release", value)
-	}
-}
-
-function onPointerMove(e: PointerEvent): void {
-	if (!disabled) {
-		e.preventDefault()
-
-		capturedMovement -= e.movementY
-
-		const movementStep = (maximum - minimum) / sensitivity
-
-		let newValue = capturedValue + capturedMovement * movementStep
-		if (newValue < minimum) {
-			newValue = minimum
-		} else if (newValue > maximum) {
-			newValue = maximum
-		}
-		// value = Math.min(Math.max(value, minimum), maximum);
-
-		// round to step
-		value = Math.round((newValue - minimum) / step) * step + minimum
-
-		dispatch("change", value)
-		if (!value_is_output) {
-			dispatch("input")
+			window.addEventListener("pointermove", onPointerMove);
+			window.addEventListener("pointerup", onPointerUp);
 		}
 	}
-}
+
+	function onPointerUp(e: PointerEvent): void {
+		if (!disabled) {
+			e.preventDefault();
+
+			window.removeEventListener("pointermove", onPointerMove);
+			window.removeEventListener("pointerup", onPointerUp);
+
+			dispatch("release", value);
+		}
+	}
+
+	function onPointerMove(e: PointerEvent): void {
+		if (!disabled) {
+			e.preventDefault();
+
+			capturedMovement -= e.movementY;
+
+			const movementStep = (maximum - minimum) / sensitivity;
+
+			let newValue = capturedValue + capturedMovement * movementStep;
+			if (newValue < minimum) {
+				newValue = minimum;
+			} else if (newValue > maximum) {
+				newValue = maximum;
+			}
+			// value = Math.min(Math.max(value, minimum), maximum);
+
+			// round to step
+			value = Math.round((newValue - minimum) / step) * step + minimum;
+
+			dispatch("change", value);
+			if (!value_is_output) {
+				dispatch("input");
+			}
+		}
+	}
 </script>
 
 <div class="wrap">
@@ -160,42 +168,40 @@ function onPointerMove(e: PointerEvent): void {
 </div>
 
 <svg
-	width="{svgSize}"
-	height="{svgSize}"
+	width={svgSize}
+	height={svgSize}
 	viewBox="0 0 {SCALE} {SCALE}"
 	class="knob"
-	on:pointerdown="{onPointerDown}">
+	on:pointerdown={onPointerDown}
+>
 	<path
-		d="{arcFullPath}"
-		stroke="{lineBackgroundColor}"
-		stroke-width="{lineWidth}"
+		d={arcFullPath}
+		stroke={lineBackgroundColor}
+		stroke-width={lineWidth}
 		fill="none"
 	/>
 	<path
-		d="{arcValuePath}"
-		stroke="{lineColor}"
-		stroke-width="{lineWidth}"
+		d={arcValuePath}
+		stroke={lineColor}
+		stroke-width={lineWidth}
 		fill="none"
 	/>
-	<text
-		x="50%"
-		y="56%"
-		text-anchor="middle"
-		fill="{textColor}"
-		class="knob-text">{value}</text>
+	<text x="50%" y="56%" text-anchor="middle" fill={textColor} class="knob-text"
+		>{value}</text
+	>
 </svg>
 
 <input
-{id}
-data-testid="number-input"
-type="number"
-bind:value
-min={minimum}
-max={maximum}
-on:blur={clamp}
-{step}
-{disabled}
-on:pointerup={handle_release}
+	{id}
+	data-testid="number-input"
+	type="number"
+	bind:value
+	min={minimum}
+	max={maximum}
+	on:blur={clamp}
+	{step}
+	{disabled}
+	on:pointerup={handle_release}
 />
 
 <style>

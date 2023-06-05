@@ -3,10 +3,10 @@ export const modes = ["static", "dynamic"];
 
 export const document = (config: Record<string, any>) => ({
 	type: {
-		payload: "number",
+		payload: "number"
 	},
 	description: {
-		payload: "selected value",
+		payload: "selected value"
 	},
-	example_data: config.value ?? config.minimum,
+	example_data: config.value ?? config.minimum
 });
