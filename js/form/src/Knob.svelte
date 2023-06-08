@@ -49,8 +49,9 @@
 	const MID_X = SCALE / 2;
 	const MID_Y = SCALE / 2;
 
-	const MIN_RADIANS = (4 * Math.PI) / 3;
-	const MAX_RADIANS = -Math.PI / 3;
+	const GAP_ANGLE = 75;
+	const MIN_ANGLE = GAP_ANGLE / 2;
+	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
 
 	export let responsive = false;
 
@@ -68,47 +69,57 @@
 
 	$: svgSize = responsive ? size + "%" : size;
 
-	$: arcFullPath =
-		`M ${minX} ${minY} A ${radius} ${radius} ` + `0 1 1 ${maxX} ${maxY}`;
+	$: arcFullPath = ccwArcPath(radius, MIN_ANGLE, MAX_ANGLE);
+	$: arcValuePath = ccwArcPath(radius, originAngle, valueAngle);
 
-	$: arcValuePath =
-		`M ${originX} ${originY} A ${radius} ${radius} ` +
-		`0 ${largeArc} ${sweep} ${valueX} ${valueY}`;
-
-	$: originRadians =
-		minimum > 0 && maximum > 0
-			? mapRange(minimum, minimum, maximum, MIN_RADIANS, MAX_RADIANS)
-			: mapRange(0, minimum, maximum, MIN_RADIANS, MAX_RADIANS);
-
-	$: valueRadians = mapRange(value, minimum, maximum, MIN_RADIANS, MAX_RADIANS);
+	$: valueAngle = valueToAngle(value);
+	$: originAngle = minimum <= 0 && maximum >= 0 ? valueToAngle(0) : MIN_ANGLE;
 
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
 	$: radius = Math.floor(SCALE / 2 - lineWidth / 2);
 
-	$: minX = MID_X + Math.cos(MIN_RADIANS) * radius;
-	$: minY = MID_Y - Math.sin(MIN_RADIANS) * radius;
-	$: maxX = MID_X + Math.cos(MAX_RADIANS) * radius;
-	$: maxY = MID_Y - Math.sin(MAX_RADIANS) * radius;
+	function valueToAngle(value: number): number {
+		const valueNorm = (value - minimum) / (maximum - minimum);
+		const angleRange = 360 - GAP_ANGLE;
+		const angleDelta = valueNorm * angleRange;
+		const angle = MIN_ANGLE + angleDelta;
+		return angle;
+	}
 
-	$: originX = MID_X + Math.cos(originRadians) * radius;
-	$: originY = MID_Y - Math.sin(originRadians) * radius;
+	function angleToPoint(radius: number, angleDeg: number) {
+		// consider point at 270 deg to be origin to avoid wrap around angles
+		const angleRad = ((angleDeg - 270) * Math.PI) / 180;
 
-	$: valueX = MID_X + Math.cos(valueRadians) * radius;
-	$: valueY = MID_Y - Math.sin(valueRadians) * radius;
+		return {
+			x: MID_X + radius * Math.cos(angleRad),
+			y: MID_Y + radius * Math.sin(angleRad)
+		};
+	}
 
-	$: largeArc = Math.abs(originRadians - valueRadians) < Math.PI ? 0 : 1;
+	function ccwArcPath(
+		radius: number,
+		startAngle: number,
+		endAngle: number
+	): string {
+		if (endAngle < startAngle) {
+			const temp = startAngle;
+			startAngle = endAngle;
+			endAngle = temp;
+		}
 
-	$: sweep = valueRadians > originRadians ? 0 : 1;
+		const startPt = angleToPoint(radius, startAngle);
+		const endPt = angleToPoint(radius, endAngle);
 
-	function mapRange(
-		x: number,
-		inMin: number,
-		inMax: number,
-		outMin: number,
-		outMax: number
-	): number {
-		return ((x - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+		const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+		const sweepFlag = 1;
+
+		const arcPath =
+			`M ${startPt.x} ${startPt.y} ` +
+			`A ${radius} ${radius} ` +
+			`0 ${largeArcFlag} ${sweepFlag} ` +
+			`${endPt.x} ${endPt.y}`;
+		return arcPath;
 	}
 
 	function onPointerDown(e: PointerEvent): void {
