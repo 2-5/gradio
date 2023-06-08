@@ -3,6 +3,7 @@ import InterpretationDropdown from "./InterpretationComponents/Dropdown.svelte";
 import InterpretationCheckbox from "./InterpretationComponents/Checkbox.svelte";
 import InterpretationCheckboxGroup from "./InterpretationComponents/CheckboxGroup.svelte";
 import InterpretationSlider from "./InterpretationComponents/Slider.svelte";
+import InterpretationKnob from "./InterpretationComponents/Knob.svelte";
 import InterpretationRadio from "./InterpretationComponents/Radio.svelte";
 import InterpretationImage from "./InterpretationComponents/Image.svelte";
 import InterpretationAudio from "./InterpretationComponents/Audio.svelte";
@@ -15,6 +16,7 @@ export const component_map = {
 	checkboxgroup: InterpretationCheckboxGroup,
 	number: InterpretationNumber,
 	slider: InterpretationSlider,
+	knob: InterpretationKnob,
 	radio: InterpretationRadio,
 	image: InterpretationImage,
 	textbox: InterpretationTextbox
