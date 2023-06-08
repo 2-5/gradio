@@ -1068,6 +1068,9 @@ class Knob(
         info: str | None = None,
         every: float | None = None,
         show_label: bool = True,
+        container: bool = True,
+        scale: int | None = None,
+        min_width: int = 160,
         interactive: bool | None = None,
         visible: bool = True,
         elem_id: str | None = None,
@@ -1085,6 +1088,9 @@ class Knob(
             info: additional component description.
             every: If `value` is a callable, run the function 'every' number of seconds while the client connection is open. Has no effect otherwise. Queue must be enabled. The event can be accessed (e.g. to cancel it) via this component's .load_event attribute.
             show_label: if True, will display label.
+            container: If True, will place the component in a container - providing some extra padding around the border.
+            scale: relative width compared to adjacent Components in a Row. For example, if Component A has scale=2, and Component B has scale=1, A will be twice as wide as B. Should be an integer.
+            min_width: minimum pixel width, will wrap if not sufficient screen space to satisfy this value. If a certain scale value results in this Component being narrower than min_width, the min_width parameter will be respected first.
             interactive: if True, knob will be adjustable; if False, adjusting will be disabled. If not provided, this is inferred based on whether the component is used as an input or output.
             visible: If False, component will be hidden.
             elem_id: An optional string that is assigned as the id of this component in the HTML DOM. Can be used for targeting CSS styles.
@@ -1107,6 +1113,9 @@ class Knob(
             info=info,
             every=every,
             show_label=show_label,
+            container=container,
+            scale=scale,
+            min_width=min_width,
             interactive=interactive,
             visible=visible,
             elem_id=elem_id,
@@ -1159,6 +1168,9 @@ class Knob(
         step: float | None = None,
         label: str | None = None,
         show_label: bool | None = None,
+        container: bool | None = None,
+        scale: int | None = None,
+        min_width: int | None = None,
         interactive: bool | None = None,
         visible: bool | None = None,
     ):
@@ -1168,6 +1180,9 @@ class Knob(
             "step": step,
             "label": label,
             "show_label": show_label,
+            "container": container,
+            "scale": scale,
+            "min_width": min_width,
             "interactive": interactive,
             "visible": visible,
             "value": value,
@@ -1205,14 +1220,13 @@ class Knob(
         container: bool | None = None,
     ):
         """
-        This method can be used to change the appearance of the Knob.
-        Parameters:
-            container: If True, will place the component in a container - providing some extra padding around the border.
+        This method is deprecated. Please set these arguments in the constructor instead.
         """
-        Component.style(
-            self,
-            container=container,
+        warnings.warn(
+            "The `style` method is deprecated. Please set these arguments in the constructor instead."
         )
+        if container is not None:
+            self.container = container
         return self
 
 
