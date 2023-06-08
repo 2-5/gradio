@@ -135,25 +135,23 @@
 		document?: (arg0: Record<string, unknown>) => Documentation;
 	};
 
-	function load_component<T extends ComponentMeta["type"]>(
+	async function load_component<T extends ComponentMeta["type"]>(
 		name: T
 	): Promise<{
 		name: T;
 		component: LoadedComponent;
 	}> {
-		return new Promise(async (res, rej) => {
-			try {
-				const c = await component_map[name]();
-				res({
-					name,
-					component: c as LoadedComponent
-				});
-			} catch (e) {
-				console.error("failed to load: " + name);
-				console.error(e);
-				rej(e);
-			}
-		});
+		try {
+			const c = await component_map[name]();
+			return {
+				name,
+				component: c as LoadedComponent
+			};
+		} catch (e) {
+			console.error(`failed to load: ${name}`);
+			console.error(e);
+			throw e;
+		}
 	}
 
 	const component_set = new Set<
@@ -328,9 +326,16 @@
 
 		var a = target.getElementsByTagName("a");
 
+		const is_external_url = (link: string | null) =>
+			link && new URL(link).origin !== location.origin;
+
 		for (var i = 0; i < a.length; i++) {
 			const _target = a[i].getAttribute("target");
-			if (_target !== "_blank") a[i].setAttribute("target", "_blank");
+			const _link = a[i].getAttribute("href");
+
+			// only target anchor tags with external links
+			if (is_external_url(_link) && _target !== "_blank")
+				a[i].setAttribute("target", "_blank");
 		}
 
 		dependencies.forEach((dep, i) => {
