@@ -60,6 +60,8 @@
 	let capturedValue = 0;
 	let capturedMovement = 0;
 
+	$: digitCount = step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
+
 	$: arcFullPath = ccwArcPath(radius, MIN_ANGLE, MAX_ANGLE);
 	$: arcValuePath = ccwArcPath(radius, originAngle, valueAngle);
 
@@ -69,6 +71,13 @@
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
 	$: radius = Math.floor(SCALE / 2 - lineWidth / 2);
+
+	function roundToStep(value: number): number {
+		value = Math.round(value / step) * step;
+		// use exponential notation for rounding, to prevent outcomes like 0.40000000001
+		value = Number(Math.round(Number(value + "e" + digitCount)) + "e-" + digitCount);
+		return value;
+	}
 
 	function valueToAngle(value: number): number {
 		const valueNorm = (value - minimum) / (maximum - minimum);
@@ -145,10 +154,10 @@
 			const movementStep = (maximum - minimum) / sensitivity;
 
 			let newValue = capturedValue + capturedMovement * movementStep;
-			newValue = Math.min(Math.max(newValue, minimum), maximum);
 
-			// round to step
-			value = Math.round((newValue - minimum) / step) * step + minimum;
+			newValue = roundToStep(newValue);
+
+			value = Math.min(Math.max(newValue, minimum), maximum);
 		}
 	}
 </script>
