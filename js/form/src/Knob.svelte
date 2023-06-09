@@ -174,6 +174,7 @@
 	<svg
 		viewBox="0 0 {SCALE} {SCALE}"
 		class="knob"
+		class:knob-disabled={disabled}
 		on:pointerdown={onPointerDown}
 	>
 		<path
@@ -187,6 +188,7 @@
 			stroke-width={STROKE_WIDTH}
 			fill="none"
 			class="knob-arc-value"
+			class:knob-arc-value-disabled={disabled}
 		/>
 		<text x="50%" y="56%" text-anchor="middle" class="knob-text">{value}</text>
 	</svg>
@@ -213,8 +215,12 @@
 	}
 
 	.knob {
-		cursor: pointer;
 		width: 100%;
+		cursor: pointer;
+	}
+
+	.knob-disabled {
+		cursor: not-allowed;
 	}
 
 	.knob-arc-full {
@@ -223,6 +229,10 @@
 
 	.knob-arc-value {
 		stroke: var(--checkbox-background-color-selected);
+	}
+
+	.knob-arc-value-disabled {
+		stroke-opacity: 0.25;
 	}
 
 	.knob-text {
