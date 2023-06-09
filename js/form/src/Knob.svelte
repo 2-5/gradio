@@ -34,7 +34,7 @@
 	});
 	$: value, handle_change();
 
-	const clamp = () => {
+	const handle_release = () => {
 		dispatch("release", value);
 		value = Math.min(Math.max(value, minimum), maximum);
 	};
@@ -193,7 +193,7 @@
 		bind:value
 		min={minimum}
 		max={maximum}
-		on:blur={clamp}
+		on:blur={handle_release}
 		{step}
 		{disabled}
 	/>
