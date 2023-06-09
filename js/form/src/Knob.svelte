@@ -60,7 +60,8 @@
 	let capturedValue = 0;
 	let capturedMovement = 0;
 
-	$: digitCount = step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
+	$: digitCount =
+		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
 
 	$: arcFullPath = ccwArcPath(radius, MIN_ANGLE, MAX_ANGLE);
 	$: arcValuePath = ccwArcPath(radius, originAngle, valueAngle);
@@ -75,7 +76,9 @@
 	function roundToStep(value: number): number {
 		value = Math.round(value / step) * step;
 		// use exponential notation for rounding, to prevent outcomes like 0.40000000001
-		value = Number(Math.round(Number(value + "e" + digitCount)) + "e-" + digitCount);
+		value = Number(
+			Math.round(Number(value + "e" + digitCount)) + "e-" + digitCount
+		);
 		return value;
 	}
 
@@ -184,9 +187,7 @@
 			fill="none"
 			class="knob-arc-value"
 		/>
-		<text x="50%" y="56%" text-anchor="middle" class="knob-text"
-			>{value}</text
-		>
+		<text x="50%" y="56%" text-anchor="middle" class="knob-text">{value}</text>
 	</svg>
 
 	<input
