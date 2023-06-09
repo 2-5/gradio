@@ -211,6 +211,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		width: 64px;
 	}
 
@@ -236,6 +237,7 @@
 	}
 
 	.knob-text {
+		fill: var(--body-text-color);
 		font-size: 22px;
 		user-select: none;
 	}
