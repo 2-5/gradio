@@ -53,10 +53,7 @@
 	const MIN_ANGLE = GAP_ANGLE / 2;
 	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
 
-	export let size = 50;
-
-	export let textColor = "#000000";
-	export let lineWidth = 8;
+	export let lineWidth = 10;
 
 	export let sensitivity = 200;
 
@@ -160,54 +157,54 @@
 	<label for={id}>
 		<BlockTitle {show_label} {info}>{label}</BlockTitle>
 	</label>
-</div>
 
-<svg
-	width={size}
-	height={size}
-	viewBox="0 0 {SCALE} {SCALE}"
-	class="knob"
-	on:pointerdown={onPointerDown}
->
-	<path
-		d={arcFullPath}
-		stroke-width={lineWidth}
-		fill="none"
-		class="knob-arc-full"
-	/>
-	<path
-		d={arcValuePath}
-		stroke-width={lineWidth}
-		fill="none"
-		class="knob-arc-value"
-	/>
-	<text x="50%" y="56%" text-anchor="middle" fill={textColor} class="knob-text"
-		>{value}</text
+	<svg
+		viewBox="0 0 {SCALE} {SCALE}"
+		class="knob"
+		on:pointerdown={onPointerDown}
 	>
-</svg>
+		<path
+			d={arcFullPath}
+			stroke-width={lineWidth}
+			fill="none"
+			class="knob-arc-full"
+		/>
+		<path
+			d={arcValuePath}
+			stroke-width={lineWidth}
+			fill="none"
+			class="knob-arc-value"
+		/>
+		<text x="50%" y="56%" text-anchor="middle" class="knob-text"
+			>{value}</text
+		>
+	</svg>
 
-<input
-	{id}
-	data-testid="number-input"
-	type="number"
-	bind:value
-	min={minimum}
-	max={maximum}
-	on:blur={clamp}
-	{step}
-	{disabled}
-	on:pointerup={handle_release}
-/>
+	<input
+		{id}
+		data-testid="number-input"
+		type="number"
+		bind:value
+		min={minimum}
+		max={maximum}
+		on:blur={clamp}
+		{step}
+		{disabled}
+		on:pointerup={handle_release}
+	/>
+</div>
 
 <style>
 	.wrap {
 		display: flex;
 		flex-direction: column;
-		width: 100%;
+		justify-content: center;
+		width: 64px;
 	}
 
 	.knob {
 		cursor: pointer;
+		width: 100%;
 	}
 
 	.knob-arc-full {
@@ -219,7 +216,7 @@
 	}
 
 	.knob-text {
-		font-size: 1.5rem;
+		font-size: 22px;
 		user-select: none;
 	}
 
