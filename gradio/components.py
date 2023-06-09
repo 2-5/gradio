@@ -1070,7 +1070,7 @@ class Knob(
         show_label: bool = True,
         container: bool = True,
         scale: int | None = None,
-        min_width: int = 160,
+        min_width: int = 90,
         interactive: bool | None = None,
         visible: bool = True,
         elem_id: str | None = None,
