@@ -34,9 +34,6 @@
 	});
 	$: value, handle_change();
 
-	function handle_release(e: MouseEvent) {
-		dispatch("release", value);
-	}
 	const clamp = () => {
 		dispatch("release", value);
 		value = Math.min(Math.max(value, minimum), maximum);
@@ -199,7 +196,6 @@
 		on:blur={clamp}
 		{step}
 		{disabled}
-		on:pointerup={handle_release}
 	/>
 </div>
 
