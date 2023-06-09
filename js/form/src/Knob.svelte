@@ -53,21 +53,15 @@
 	const MIN_ANGLE = GAP_ANGLE / 2;
 	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
 
-	export let responsive = false;
-
 	export let size = 50;
 
 	export let textColor = "#000000";
-	export let lineColor = "#409eff";
-	export let lineBackgroundColor = "#dcdfe6";
 	export let lineWidth = 8;
 
 	export let sensitivity = 200;
 
 	let capturedValue = 0;
 	let capturedMovement = 0;
-
-	$: svgSize = responsive ? size + "%" : size;
 
 	$: arcFullPath = ccwArcPath(radius, MIN_ANGLE, MAX_ANGLE);
 	$: arcValuePath = ccwArcPath(radius, originAngle, valueAngle);
@@ -179,23 +173,23 @@
 </div>
 
 <svg
-	width={svgSize}
-	height={svgSize}
+	width={size}
+	height={size}
 	viewBox="0 0 {SCALE} {SCALE}"
 	class="knob"
 	on:pointerdown={onPointerDown}
 >
 	<path
 		d={arcFullPath}
-		stroke={lineBackgroundColor}
 		stroke-width={lineWidth}
 		fill="none"
+		class="knob-arc-full"
 	/>
 	<path
 		d={arcValuePath}
-		stroke={lineColor}
 		stroke-width={lineWidth}
 		fill="none"
+		class="knob-arc-value"
 	/>
 	<text x="50%" y="56%" text-anchor="middle" fill={textColor} class="knob-text"
 		>{value}</text
@@ -224,6 +218,14 @@
 
 	.knob {
 		cursor: pointer;
+	}
+
+	.knob-arc-full {
+		stroke: var(--checkbox-border-color);
+	}
+
+	.knob-arc-value {
+		stroke: var(--checkbox-background-color-selected);
 	}
 
 	.knob-text {
