@@ -145,7 +145,7 @@
 			window.removeEventListener("pointermove", onPointerMove);
 			window.removeEventListener("pointerup", onPointerUp);
 
-			dispatch("release", value);
+			handle_release();
 		}
 	}
 
