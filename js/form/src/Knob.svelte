@@ -35,7 +35,7 @@
 	$: value, handle_change();
 
 	const handle_release = () => {
-		value = Math.min(Math.max(value, minimum), maximum);
+		value = clamp(value);
 		dispatch("release", value);
 	};
 
@@ -69,6 +69,10 @@
 	// half of the stroke width to make it touch the view box
 	$: radius = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
 
+	function clamp(value: number): number {
+		return Math.min(Math.max(value, minimum), maximum);
+	}
+
 	function roundToStep(value: number): number {
 		value = Math.round(value / step) * step;
 		// use exponential notation for rounding, to prevent outcomes like 0.40000000001
@@ -79,6 +83,7 @@
 	}
 
 	function valueToAngle(value: number): number {
+		value = clamp(value);
 		const valueNorm = (value - minimum) / (maximum - minimum);
 		const angleRange = 360 - GAP_ANGLE;
 		const angleDelta = valueNorm * angleRange;
@@ -154,7 +159,7 @@
 
 			let newValue = capturedValue + capturedMovement * movementStep;
 			newValue = roundToStep(newValue);
-			newValue = Math.min(Math.max(newValue, minimum), maximum);
+			newValue = clamp(newValue);
 
 			value = newValue;
 		}
