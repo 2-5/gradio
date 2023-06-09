@@ -154,10 +154,10 @@
 			const movementStep = (maximum - minimum) / sensitivity;
 
 			let newValue = capturedValue + capturedMovement * movementStep;
-
 			newValue = roundToStep(newValue);
+			newValue = Math.min(Math.max(newValue, minimum), maximum);
 
-			value = Math.min(Math.max(newValue, minimum), maximum);
+			value = newValue;
 		}
 	}
 </script>
