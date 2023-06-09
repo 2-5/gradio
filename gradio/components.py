@@ -2364,6 +2364,7 @@ class Video(
         elem_classes: list[str] | str | None = None,
         mirror_webcam: bool = True,
         include_audio: bool | None = None,
+        autoplay: bool = False,
         **kwargs,
     ):
         """
@@ -2387,6 +2388,7 @@ class Video(
             include_audio: Whether the component should record/retain the audio track for a video. By default, audio is excluded for webcam videos and included for uploaded videos.
         """
         self.format = format
+        self.autoplay = autoplay
         valid_sources = ["upload", "webcam"]
         if source not in valid_sources:
             raise ValueError(
@@ -2423,6 +2425,7 @@ class Video(
             "width": self.width,
             "mirror_webcam": self.mirror_webcam,
             "include_audio": self.include_audio,
+            "autoplay": self.autoplay,
             **IOComponent.get_config(self),
         }
 
@@ -2442,6 +2445,7 @@ class Video(
         min_width: int | None = None,
         interactive: bool | None = None,
         visible: bool | None = None,
+        autoplay: bool | None = None,
     ):
         return {
             "source": source,
@@ -2455,6 +2459,7 @@ class Video(
             "interactive": interactive,
             "visible": visible,
             "value": value,
+            "autoplay": autoplay,
             "__type__": "update",
         }
 
@@ -2710,6 +2715,7 @@ class Audio(
         elem_id: str | None = None,
         elem_classes: list[str] | str | None = None,
         format: Literal["wav", "mp3"] = "wav",
+        autoplay: bool = False,
         **kwargs,
     ):
         """
@@ -2764,12 +2770,14 @@ class Audio(
         )
         TokenInterpretable.__init__(self)
         self.format = format
+        self.autoplay = autoplay
 
     def get_config(self):
         return {
             "source": self.source,
             "value": self.value,
             "streaming": self.streaming,
+            "autoplay": self.autoplay,
             **IOComponent.get_config(self),
         }
 
@@ -2790,6 +2798,7 @@ class Audio(
         min_width: int | None = None,
         interactive: bool | None = None,
         visible: bool | None = None,
+        autoplay: bool | None = None,
     ):
         return {
             "source": source,
@@ -2801,6 +2810,7 @@ class Audio(
             "interactive": interactive,
             "visible": visible,
             "value": value,
+            "autoplay": autoplay,
             "__type__": "update",
         }
 
