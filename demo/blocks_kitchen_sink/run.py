@@ -91,6 +91,15 @@ with gr.Blocks(theme=base_theme) as demo:
     with gr.Row():
         slider1 = gr.Slider(label="Slider 1")
         slider2 = gr.Slider(label="Slider 2")
+
+    with gr.Row():
+        knob1 = gr.Knob(label="Knob 1")
+        knob2 = gr.Knob(label="Knob 2")
+        knob3 = gr.Knob(label="Knob 3")
+        knob4 = gr.Knob(label="Knob 4")
+        knob5 = gr.Knob(label="Knob 5")
+        knob6 = gr.Knob(label="Knob 6")
+
     checkboxes = gr.CheckboxGroup(["A", "B", "C"], label="Checkbox Group (select)")
 
     with gr.Row():
