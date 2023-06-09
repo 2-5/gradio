@@ -45,6 +45,7 @@
 	// --------------------------------------------------------------------------
 
 	const SCALE = 100;
+	const STROKE_WIDTH = 10;
 
 	const MID_X = SCALE / 2;
 	const MID_Y = SCALE / 2;
@@ -52,8 +53,6 @@
 	const GAP_ANGLE = 75;
 	const MIN_ANGLE = GAP_ANGLE / 2;
 	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
-
-	export let lineWidth = 10;
 
 	export let sensitivity = 200;
 
@@ -71,7 +70,7 @@
 
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
-	$: radius = Math.floor(SCALE / 2 - lineWidth / 2);
+	$: radius = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
 
 	function roundToStep(value: number): number {
 		value = Math.round(value / step) * step;
@@ -177,13 +176,13 @@
 	>
 		<path
 			d={arcFullPath}
-			stroke-width={lineWidth}
+			stroke-width={STROKE_WIDTH}
 			fill="none"
 			class="knob-arc-full"
 		/>
 		<path
 			d={arcValuePath}
-			stroke-width={lineWidth}
+			stroke-width={STROKE_WIDTH}
 			fill="none"
 			class="knob-arc-value"
 		/>
