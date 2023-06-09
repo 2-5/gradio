@@ -63,8 +63,8 @@
 	$: digitCount =
 		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
 
-	$: arcFullPath = ccwArcPath(radius, MIN_ANGLE, MAX_ANGLE);
-	$: arcValuePath = ccwArcPath(radius, originAngle, valueAngle);
+	$: arcFullPath = arcPath(radius, MIN_ANGLE, MAX_ANGLE);
+	$: arcValuePath = arcPath(radius, originAngle, valueAngle);
 
 	$: valueAngle = valueToAngle(value);
 	$: originAngle = minimum <= 0 && maximum >= 0 ? valueToAngle(0) : MIN_ANGLE;
@@ -100,7 +100,7 @@
 		};
 	}
 
-	function ccwArcPath(
+	function arcPath(
 		radius: number,
 		startAngle: number,
 		endAngle: number
