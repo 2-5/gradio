@@ -35,8 +35,8 @@
 	$: value, handle_change();
 
 	const handle_release = () => {
-		dispatch("release", value);
 		value = Math.min(Math.max(value, minimum), maximum);
+		dispatch("release", value);
 	};
 
 	// --------------------------------------------------------------------------
