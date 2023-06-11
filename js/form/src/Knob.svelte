@@ -124,30 +124,30 @@
 		return arcPath;
 	}
 
-	function onPointerDown(e: PointerEvent): void {
+	function handle_pointer_down(e: PointerEvent): void {
 		if (!disabled) {
 			e.preventDefault();
 
 			capturedValue = value;
 			capturedMovement = 0;
 
-			window.addEventListener("pointermove", onPointerMove);
-			window.addEventListener("pointerup", onPointerUp);
+			window.addEventListener("pointermove", handle_pointer_move);
+			window.addEventListener("pointerup", handle_pointer_up);
 		}
 	}
 
-	function onPointerUp(e: PointerEvent): void {
+	function handle_pointer_up(e: PointerEvent): void {
 		if (!disabled) {
 			e.preventDefault();
 
-			window.removeEventListener("pointermove", onPointerMove);
-			window.removeEventListener("pointerup", onPointerUp);
+			window.removeEventListener("pointermove", handle_pointer_move);
+			window.removeEventListener("pointerup", handle_pointer_up);
 
 			handle_release();
 		}
 	}
 
-	function onPointerMove(e: PointerEvent): void {
+	function handle_pointer_move(e: PointerEvent): void {
 		if (!disabled) {
 			e.preventDefault();
 
@@ -173,7 +173,7 @@
 		viewBox="0 0 {SCALE} {SCALE}"
 		class="knob"
 		class:knob-disabled={disabled}
-		on:pointerdown={onPointerDown}
+		on:pointerdown={handle_pointer_down}
 	>
 		<path
 			d={arcFullPath}
