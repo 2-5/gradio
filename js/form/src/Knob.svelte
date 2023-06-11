@@ -53,8 +53,8 @@
 	$: step_digit_count =
 		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
 
-	$: arc_full_path = arc_path(RADIUS, MIN_ANGLE, MAX_ANGLE);
-	$: arc_value_path = arc_path(RADIUS, origin_angle, value_angle);
+	$: full_arc_path = arc_path(RADIUS, MIN_ANGLE, MAX_ANGLE);
+	$: value_arc_path = arc_path(RADIUS, origin_angle, value_angle);
 
 	$: value_angle = value_to_angle(value);
 	$: origin_angle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
@@ -176,13 +176,13 @@
 		on:pointerdown={handle_pointer_down}
 	>
 		<path
-			d={arc_full_path}
+			d={full_arc_path}
 			stroke-width={STROKE_WIDTH}
 			fill="none"
 			class="knob-arc-full"
 		/>
 		<path
-			d={arc_value_path}
+			d={value_arc_path}
 			stroke-width={STROKE_WIDTH}
 			fill="none"
 			class="knob-arc-value"
