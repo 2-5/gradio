@@ -47,7 +47,8 @@
 	$: value, handle_change();
 
 	$: value_angle = value_to_angle(value);
-	$: origin_angle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
+	$: origin_angle =
+		minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
 
 	$: full_arc_path = arc_path(RADIUS, MIN_ANGLE, MAX_ANGLE);
 	$: value_arc_path = arc_path(RADIUS, origin_angle, value_angle);
@@ -110,7 +111,9 @@
 		value = Math.round(value / step) * step;
 		// use exponential notation for rounding, to prevent outcomes like 0.40000000001
 		value = Number(
-			Math.round(Number(value + "e" + step_digit_count)) + "e-" + step_digit_count
+			Math.round(Number(value + "e" + step_digit_count)) +
+				"e-" +
+				step_digit_count
 		);
 		return value;
 	}
@@ -134,11 +137,7 @@
 		};
 	}
 
-	function arc_path(
-		radius: number,
-		start_angle: number,
-		end_angle: number
-	) {
+	function arc_path(radius: number, start_angle: number, end_angle: number) {
 		if (end_angle < start_angle) {
 			const temp = start_angle;
 			start_angle = end_angle;
