@@ -46,7 +46,7 @@
 	});
 	$: value, handle_change();
 
-	const handle_release = () => {
+	function handle_release() {
 		value = clamp(value);
 		dispatch("release", value);
 	};
