@@ -46,6 +46,19 @@
 	});
 	$: value, handle_change();
 
+	$: step_digit_count =
+		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
+
+	$: arc_full_path = arc_path(radius, MIN_ANGLE, MAX_ANGLE);
+	$: arc_value_path = arc_path(radius, origin_angle, value_angle);
+
+	$: value_angle = value_to_angle(value);
+	$: origin_angle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
+
+	// radius goes to the middle of the stroke path, so subtract
+	// half of the stroke width to make it touch the view box
+	$: radius = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
+
 	function handle_release() {
 		value = clamp(value);
 		dispatch("release", value);
@@ -92,19 +105,6 @@
 
 	let captured_value = 0;
 	let captured_movement = 0;
-
-	$: step_digit_count =
-		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
-
-	$: arc_full_path = arc_path(radius, MIN_ANGLE, MAX_ANGLE);
-	$: arc_value_path = arc_path(radius, origin_angle, value_angle);
-
-	$: value_angle = value_to_angle(value);
-	$: origin_angle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
-
-	// radius goes to the middle of the stroke path, so subtract
-	// half of the stroke width to make it touch the view box
-	$: radius = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
 
 	function clamp(value: number): number {
 		return Math.min(Math.max(value, minimum), maximum);
