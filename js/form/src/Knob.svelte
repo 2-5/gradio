@@ -50,14 +50,14 @@
 	});
 	$: value, handle_change();
 
-	$: step_digit_count =
-		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
-
 	$: value_angle = value_to_angle(value);
 	$: origin_angle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
 
 	$: full_arc_path = arc_path(RADIUS, MIN_ANGLE, MAX_ANGLE);
 	$: value_arc_path = arc_path(RADIUS, origin_angle, value_angle);
+
+	$: step_digit_count =
+		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
 
 	let captured_value = 0;
 	let captured_movement = 0;
