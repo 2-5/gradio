@@ -244,7 +244,8 @@
 		border: var(--input-border-width) solid var(--input-border-color);
 		border-radius: var(--input-radius);
 		background: var(--input-background-fill);
-		padding: var(--size-2) var(--size-2);
+		padding: var(--size-2) 0;
+		width: 100%;
 		height: var(--size-6);
 		color: var(--body-text-color);
 		font-size: var(--input-text-size);
