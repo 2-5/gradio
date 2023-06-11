@@ -151,12 +151,12 @@
 		const large_arc_flag = end_angle - start_angle > 180 ? 1 : 0;
 		const sweep_flag = 1;
 
-		const arc_path =
+		return (
 			`M ${start_pt.x} ${start_pt.y} ` +
 			`A ${radius} ${radius} ` +
 			`0 ${large_arc_flag} ${sweep_flag} ` +
-			`${end_pt.x} ${end_pt.y}`;
-		return arc_path;
+			`${end_pt.x} ${end_pt.y}`
+		);
 	}
 </script>
 
