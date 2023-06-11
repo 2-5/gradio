@@ -55,8 +55,8 @@
 		if (!disabled) {
 			e.preventDefault();
 
-			capturedValue = value;
-			capturedMovement = 0;
+			captured_value = value;
+			captured_movement = 0;
 
 			window.addEventListener("pointermove", handle_pointer_move);
 			window.addEventListener("pointerup", handle_pointer_up);
@@ -78,11 +78,11 @@
 		if (!disabled) {
 			e.preventDefault();
 
-			capturedMovement -= e.movementY;
+			captured_movement -= e.movementY;
 
 			const movementStep = (maximum - minimum) / POINTER_SENSITIVITY;
 
-			let newValue = capturedValue + capturedMovement * movementStep;
+			let newValue = captured_value + captured_movement * movementStep;
 			newValue = round_to_step(newValue);
 			newValue = clamp(newValue);
 
@@ -90,17 +90,17 @@
 		}
 	}
 
-	let capturedValue = 0;
-	let capturedMovement = 0;
+	let captured_value = 0;
+	let captured_movement = 0;
 
-	$: digitCount =
+	$: step_digit_count =
 		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
 
-	$: arcFullPath = arc_path(radius, MIN_ANGLE, MAX_ANGLE);
-	$: arcValuePath = arc_path(radius, originAngle, valueAngle);
+	$: arc_full_path = arc_path(radius, MIN_ANGLE, MAX_ANGLE);
+	$: arc_value_path = arc_path(radius, origin_angle, value_angle);
 
-	$: valueAngle = value_to_angle(value);
-	$: originAngle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
+	$: value_angle = value_to_angle(value);
+	$: origin_angle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
 
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
@@ -114,7 +114,7 @@
 		value = Math.round(value / step) * step;
 		// use exponential notation for rounding, to prevent outcomes like 0.40000000001
 		value = Number(
-			Math.round(Number(value + "e" + digitCount)) + "e-" + digitCount
+			Math.round(Number(value + "e" + step_digit_count)) + "e-" + step_digit_count
 		);
 		return value;
 	}
@@ -176,13 +176,13 @@
 		on:pointerdown={handle_pointer_down}
 	>
 		<path
-			d={arcFullPath}
+			d={arc_full_path}
 			stroke-width={STROKE_WIDTH}
 			fill="none"
 			class="knob-arc-full"
 		/>
 		<path
-			d={arcValuePath}
+			d={arc_value_path}
 			stroke-width={STROKE_WIDTH}
 			fill="none"
 			class="knob-arc-value"
