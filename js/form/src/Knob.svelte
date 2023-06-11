@@ -14,7 +14,7 @@
 
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
-	$: radius = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
+	const RADIUS = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
 
 	const GAP_ANGLE = 75;
 	const MIN_ANGLE = GAP_ANGLE / 2;
@@ -53,8 +53,8 @@
 	$: step_digit_count =
 		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
 
-	$: arc_full_path = arc_path(radius, MIN_ANGLE, MAX_ANGLE);
-	$: arc_value_path = arc_path(radius, origin_angle, value_angle);
+	$: arc_full_path = arc_path(RADIUS, MIN_ANGLE, MAX_ANGLE);
+	$: arc_value_path = arc_path(RADIUS, origin_angle, value_angle);
 
 	$: value_angle = value_to_angle(value);
 	$: origin_angle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
