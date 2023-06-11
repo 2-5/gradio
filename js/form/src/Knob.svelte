@@ -15,7 +15,8 @@
 	const GAP_ANGLE = 75;
 	const MIN_ANGLE = GAP_ANGLE / 2;
 	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
-	export let sensitivity = 200;
+
+	const POINTER_SENSITIVITY = 200;
 
 	export let value: number = 0;
 	export let value_is_output: boolean = false;
@@ -152,7 +153,7 @@
 
 			capturedMovement -= e.movementY;
 
-			const movementStep = (maximum - minimum) / sensitivity;
+			const movementStep = (maximum - minimum) / POINTER_SENSITIVITY;
 
 			let newValue = capturedValue + capturedMovement * movementStep;
 			newValue = roundToStep(newValue);
