@@ -10,7 +10,6 @@
 	const MID_X = SCALE / 2;
 	const MID_Y = SCALE / 2;
 	const STROKE_WIDTH = 10;
-
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
 	const RADIUS = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
