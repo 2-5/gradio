@@ -63,7 +63,7 @@
 		dispatch("release", value);
 	}
 
-	function handle_pointer_down(e: PointerEvent): void {
+	function handle_pointer_down(e: PointerEvent) {
 		if (!disabled) {
 			e.preventDefault();
 
@@ -75,7 +75,7 @@
 		}
 	}
 
-	function handle_pointer_up(e: PointerEvent): void {
+	function handle_pointer_up(e: PointerEvent) {
 		if (!disabled) {
 			e.preventDefault();
 
@@ -86,7 +86,7 @@
 		}
 	}
 
-	function handle_pointer_move(e: PointerEvent): void {
+	function handle_pointer_move(e: PointerEvent) {
 		if (!disabled) {
 			e.preventDefault();
 
@@ -102,11 +102,11 @@
 		}
 	}
 
-	function clamp(value: number): number {
+	function clamp(value: number) {
 		return Math.min(Math.max(value, minimum), maximum);
 	}
 
-	function round_to_step(value: number): number {
+	function round_to_step(value: number) {
 		value = Math.round(value / step) * step;
 		// use exponential notation for rounding, to prevent outcomes like 0.40000000001
 		value = Number(
@@ -115,7 +115,7 @@
 		return value;
 	}
 
-	function value_to_angle(value: number): number {
+	function value_to_angle(value: number) {
 		value = clamp(value);
 		const value_norm = (value - minimum) / (maximum - minimum);
 		const angle_range = 360 - GAP_ANGLE;
@@ -138,7 +138,7 @@
 		radius: number,
 		start_angle: number,
 		end_angle: number
-	): string {
+	) {
 		if (end_angle < start_angle) {
 			const temp = start_angle;
 			start_angle = end_angle;
