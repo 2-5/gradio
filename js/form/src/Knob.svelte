@@ -83,7 +83,7 @@
 			const movementStep = (maximum - minimum) / POINTER_SENSITIVITY;
 
 			let newValue = capturedValue + capturedMovement * movementStep;
-			newValue = roundToStep(newValue);
+			newValue = round_to_step(newValue);
 			newValue = clamp(newValue);
 
 			value = newValue;
@@ -96,11 +96,11 @@
 	$: digitCount =
 		step >= 1 ? 0 : step.toString().length - step.toString().indexOf(".") - 1;
 
-	$: arcFullPath = arcPath(radius, MIN_ANGLE, MAX_ANGLE);
-	$: arcValuePath = arcPath(radius, originAngle, valueAngle);
+	$: arcFullPath = arc_path(radius, MIN_ANGLE, MAX_ANGLE);
+	$: arcValuePath = arc_path(radius, originAngle, valueAngle);
 
-	$: valueAngle = valueToAngle(value);
-	$: originAngle = minimum <= 0 && maximum >= 0 ? valueToAngle(0) : MIN_ANGLE;
+	$: valueAngle = value_to_angle(value);
+	$: originAngle = minimum <= 0 && maximum >= 0 ? value_to_angle(0) : MIN_ANGLE;
 
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
@@ -110,7 +110,7 @@
 		return Math.min(Math.max(value, minimum), maximum);
 	}
 
-	function roundToStep(value: number): number {
+	function round_to_step(value: number): number {
 		value = Math.round(value / step) * step;
 		// use exponential notation for rounding, to prevent outcomes like 0.40000000001
 		value = Number(
@@ -119,7 +119,7 @@
 		return value;
 	}
 
-	function valueToAngle(value: number): number {
+	function value_to_angle(value: number): number {
 		value = clamp(value);
 		const valueNorm = (value - minimum) / (maximum - minimum);
 		const angleRange = 360 - GAP_ANGLE;
@@ -128,7 +128,7 @@
 		return angle;
 	}
 
-	function angleToPoint(radius: number, angleDeg: number) {
+	function angle_to_point(radius: number, angleDeg: number) {
 		// consider point at 270 deg to be origin to avoid wrap around angles
 		const angleRad = ((angleDeg - 270) * Math.PI) / 180;
 
@@ -138,7 +138,7 @@
 		};
 	}
 
-	function arcPath(
+	function arc_path(
 		radius: number,
 		startAngle: number,
 		endAngle: number
@@ -149,18 +149,18 @@
 			endAngle = temp;
 		}
 
-		const startPt = angleToPoint(radius, startAngle);
-		const endPt = angleToPoint(radius, endAngle);
+		const startPt = angle_to_point(radius, startAngle);
+		const endPt = angle_to_point(radius, endAngle);
 
 		const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
 		const sweepFlag = 1;
 
-		const arcPath =
+		const arc_path =
 			`M ${startPt.x} ${startPt.y} ` +
 			`A ${radius} ${radius} ` +
 			`0 ${largeArcFlag} ${sweepFlag} ` +
 			`${endPt.x} ${endPt.y}`;
-		return arcPath;
+		return arc_path;
 	}
 </script>
 
