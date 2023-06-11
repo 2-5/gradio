@@ -59,6 +59,9 @@
 	// half of the stroke width to make it touch the view box
 	$: radius = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
 
+	let captured_value = 0;
+	let captured_movement = 0;
+
 	function handle_release() {
 		value = clamp(value);
 		dispatch("release", value);
@@ -102,9 +105,6 @@
 			value = newValue;
 		}
 	}
-
-	let captured_value = 0;
-	let captured_movement = 0;
 
 	function clamp(value: number): number {
 		return Math.min(Math.max(value, minimum), maximum);
