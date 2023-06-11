@@ -6,6 +6,17 @@
 	import { createEventDispatcher, afterUpdate } from "svelte";
 	import { BlockTitle } from "@gradio/atoms";
 
+	const SCALE = 100;
+	const STROKE_WIDTH = 10;
+
+	const MID_X = SCALE / 2;
+	const MID_Y = SCALE / 2;
+
+	const GAP_ANGLE = 75;
+	const MIN_ANGLE = GAP_ANGLE / 2;
+	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
+	export let sensitivity = 200;
+
 	export let value: number = 0;
 	export let value_is_output: boolean = false;
 	export let minimum: number = 0;
@@ -38,20 +49,6 @@
 		value = clamp(value);
 		dispatch("release", value);
 	};
-
-	// --------------------------------------------------------------------------
-
-	const SCALE = 100;
-	const STROKE_WIDTH = 10;
-
-	const MID_X = SCALE / 2;
-	const MID_Y = SCALE / 2;
-
-	const GAP_ANGLE = 75;
-	const MIN_ANGLE = GAP_ANGLE / 2;
-	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
-
-	export let sensitivity = 200;
 
 	let capturedValue = 0;
 	let capturedMovement = 0;
