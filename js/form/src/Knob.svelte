@@ -49,7 +49,7 @@
 	function handle_release() {
 		value = clamp(value);
 		dispatch("release", value);
-	};
+	}
 
 	function handle_pointer_down(e: PointerEvent): void {
 		if (!disabled) {
@@ -214,8 +214,8 @@
 	}
 
 	.knob {
-		width: 100%;
 		cursor: pointer;
+		width: 100%;
 	}
 
 	.knob-disabled {
