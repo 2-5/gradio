@@ -51,6 +51,45 @@
 		dispatch("release", value);
 	};
 
+	function handle_pointer_down(e: PointerEvent): void {
+		if (!disabled) {
+			e.preventDefault();
+
+			capturedValue = value;
+			capturedMovement = 0;
+
+			window.addEventListener("pointermove", handle_pointer_move);
+			window.addEventListener("pointerup", handle_pointer_up);
+		}
+	}
+
+	function handle_pointer_up(e: PointerEvent): void {
+		if (!disabled) {
+			e.preventDefault();
+
+			window.removeEventListener("pointermove", handle_pointer_move);
+			window.removeEventListener("pointerup", handle_pointer_up);
+
+			handle_release();
+		}
+	}
+
+	function handle_pointer_move(e: PointerEvent): void {
+		if (!disabled) {
+			e.preventDefault();
+
+			capturedMovement -= e.movementY;
+
+			const movementStep = (maximum - minimum) / POINTER_SENSITIVITY;
+
+			let newValue = capturedValue + capturedMovement * movementStep;
+			newValue = roundToStep(newValue);
+			newValue = clamp(newValue);
+
+			value = newValue;
+		}
+	}
+
 	let capturedValue = 0;
 	let capturedMovement = 0;
 
@@ -122,45 +161,6 @@
 			`0 ${largeArcFlag} ${sweepFlag} ` +
 			`${endPt.x} ${endPt.y}`;
 		return arcPath;
-	}
-
-	function handle_pointer_down(e: PointerEvent): void {
-		if (!disabled) {
-			e.preventDefault();
-
-			capturedValue = value;
-			capturedMovement = 0;
-
-			window.addEventListener("pointermove", handle_pointer_move);
-			window.addEventListener("pointerup", handle_pointer_up);
-		}
-	}
-
-	function handle_pointer_up(e: PointerEvent): void {
-		if (!disabled) {
-			e.preventDefault();
-
-			window.removeEventListener("pointermove", handle_pointer_move);
-			window.removeEventListener("pointerup", handle_pointer_up);
-
-			handle_release();
-		}
-	}
-
-	function handle_pointer_move(e: PointerEvent): void {
-		if (!disabled) {
-			e.preventDefault();
-
-			capturedMovement -= e.movementY;
-
-			const movementStep = (maximum - minimum) / POINTER_SENSITIVITY;
-
-			let newValue = capturedValue + capturedMovement * movementStep;
-			newValue = roundToStep(newValue);
-			newValue = clamp(newValue);
-
-			value = newValue;
-		}
 	}
 </script>
 
