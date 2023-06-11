@@ -7,19 +7,16 @@
 	import { BlockTitle } from "@gradio/atoms";
 
 	const SCALE = 100;
-	const STROKE_WIDTH = 10;
-
 	const MID_X = SCALE / 2;
 	const MID_Y = SCALE / 2;
+	const STROKE_WIDTH = 10;
 
 	// radius goes to the middle of the stroke path, so subtract
 	// half of the stroke width to make it touch the view box
 	const RADIUS = Math.floor(SCALE / 2 - STROKE_WIDTH / 2);
-
 	const GAP_ANGLE = 75;
 	const MIN_ANGLE = GAP_ANGLE / 2;
 	const MAX_ANGLE = 360 - GAP_ANGLE / 2;
-
 	const POINTER_SENSITIVITY = 200;
 
 	export let value: number = 0;
